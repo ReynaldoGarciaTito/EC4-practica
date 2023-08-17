@@ -34081,6 +34081,50 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function (r
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var client = __webpack_require__(/*! ./client */ "./src/main/js/client.js");
+var App = __webpack_require__(/*! ./pages/home */ "./src/main/js/pages/home.js");
+ReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById('react'));
+
+/***/ }),
+
+/***/ "./src/main/js/client.js":
+/*!*******************************!*\
+  !*** ./src/main/js/client.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var rest = __webpack_require__(/*! rest */ "./node_modules/rest/browser.js");
+var defaultRequest = __webpack_require__(/*! rest/interceptor/defaultRequest */ "./node_modules/rest/interceptor/defaultRequest.js");
+var mime = __webpack_require__(/*! rest/interceptor/mime */ "./node_modules/rest/interceptor/mime.js");
+var uriTemplateInterceptor = __webpack_require__(/*! ./api/uriTemplateInterceptor */ "./src/main/js/api/uriTemplateInterceptor.js");
+var errorCode = __webpack_require__(/*! rest/interceptor/errorCode */ "./node_modules/rest/interceptor/errorCode.js");
+var baseRegistry = __webpack_require__(/*! rest/mime/registry */ "./node_modules/rest/mime/registry.js");
+var registry = baseRegistry.child();
+registry.register('text/uri-list', __webpack_require__(/*! ./api/uriListConverter */ "./src/main/js/api/uriListConverter.js"));
+registry.register('application/hal+json', __webpack_require__(/*! rest/mime/type/application/hal */ "./node_modules/rest/mime/type/application/hal.js"));
+module.exports = rest.wrap(mime, {
+  registry: registry
+}).wrap(uriTemplateInterceptor).wrap(errorCode).wrap(defaultRequest, {
+  headers: {
+    'Accept': 'application/hal+json'
+  }
+});
+
+/***/ }),
+
+/***/ "./src/main/js/pages/home.js":
+/*!***********************************!*\
+  !*** ./src/main/js/pages/home.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -34095,8 +34139,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-var client = __webpack_require__(/*! ./client */ "./src/main/js/client.js");
+var client = __webpack_require__(/*! ../client */ "./src/main/js/client.js");
 var App = /*#__PURE__*/function (_React$Component) {
   _inherits(App, _React$Component);
   var _super = _createSuper(App);
@@ -34134,21 +34177,40 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h2", null, "Instrumentos"), /*#__PURE__*/React.createElement(InstrumentoList, {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Titulo, {
+        entidad: "Instrumento"
+      }), /*#__PURE__*/React.createElement(InstrumentoList, {
         instrumentos: this.state.instrumentos
-      }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("h2", null, "Musicos"), /*#__PURE__*/React.createElement(MusicoList, {
+      }), /*#__PURE__*/React.createElement(Titulo, {
+        entidad: "Musico"
+      }), /*#__PURE__*/React.createElement(MusicoList, {
         musicos: this.state.musicos
       }));
     }
   }]);
   return App;
 }(React.Component);
-var InstrumentoList = /*#__PURE__*/function (_React$Component2) {
-  _inherits(InstrumentoList, _React$Component2);
-  var _super2 = _createSuper(InstrumentoList);
+var Titulo = /*#__PURE__*/function (_React$Component2) {
+  _inherits(Titulo, _React$Component2);
+  var _super2 = _createSuper(Titulo);
+  function Titulo() {
+    _classCallCheck(this, Titulo);
+    return _super2.apply(this, arguments);
+  }
+  _createClass(Titulo, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("h2", null, this.props.entidad), /*#__PURE__*/React.createElement("span", null, "Listado de ", this.props.entidad.toLowerCase()), /*#__PURE__*/React.createElement("br", null));
+    }
+  }]);
+  return Titulo;
+}(React.Component);
+var InstrumentoList = /*#__PURE__*/function (_React$Component3) {
+  _inherits(InstrumentoList, _React$Component3);
+  var _super3 = _createSuper(InstrumentoList);
   function InstrumentoList() {
     _classCallCheck(this, InstrumentoList);
-    return _super2.apply(this, arguments);
+    return _super3.apply(this, arguments);
   }
   _createClass(InstrumentoList, [{
     key: "render",
@@ -34166,12 +34228,12 @@ var InstrumentoList = /*#__PURE__*/function (_React$Component2) {
   }]);
   return InstrumentoList;
 }(React.Component);
-var MusicoList = /*#__PURE__*/function (_React$Component3) {
-  _inherits(MusicoList, _React$Component3);
-  var _super3 = _createSuper(MusicoList);
+var MusicoList = /*#__PURE__*/function (_React$Component4) {
+  _inherits(MusicoList, _React$Component4);
+  var _super4 = _createSuper(MusicoList);
   function MusicoList() {
     _classCallCheck(this, MusicoList);
-    return _super3.apply(this, arguments);
+    return _super4.apply(this, arguments);
   }
   _createClass(MusicoList, [{
     key: "render",
@@ -34189,12 +34251,12 @@ var MusicoList = /*#__PURE__*/function (_React$Component3) {
   }]);
   return MusicoList;
 }(React.Component);
-var Instrumento = /*#__PURE__*/function (_React$Component4) {
-  _inherits(Instrumento, _React$Component4);
-  var _super4 = _createSuper(Instrumento);
+var Instrumento = /*#__PURE__*/function (_React$Component5) {
+  _inherits(Instrumento, _React$Component5);
+  var _super5 = _createSuper(Instrumento);
   function Instrumento() {
     _classCallCheck(this, Instrumento);
-    return _super4.apply(this, arguments);
+    return _super5.apply(this, arguments);
   }
   _createClass(Instrumento, [{
     key: "render",
@@ -34204,12 +34266,12 @@ var Instrumento = /*#__PURE__*/function (_React$Component4) {
   }]);
   return Instrumento;
 }(React.Component);
-var Musico = /*#__PURE__*/function (_React$Component5) {
-  _inherits(Musico, _React$Component5);
-  var _super5 = _createSuper(Musico);
+var Musico = /*#__PURE__*/function (_React$Component6) {
+  _inherits(Musico, _React$Component6);
+  var _super6 = _createSuper(Musico);
   function Musico() {
     _classCallCheck(this, Musico);
-    return _super5.apply(this, arguments);
+    return _super6.apply(this, arguments);
   }
   _createClass(Musico, [{
     key: "render",
@@ -34219,36 +34281,7 @@ var Musico = /*#__PURE__*/function (_React$Component5) {
   }]);
   return Musico;
 }(React.Component);
-ReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById('react'));
-
-/***/ }),
-
-/***/ "./src/main/js/client.js":
-/*!*******************************!*\
-  !*** ./src/main/js/client.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var rest = __webpack_require__(/*! rest */ "./node_modules/rest/browser.js");
-var defaultRequest = __webpack_require__(/*! rest/interceptor/defaultRequest */ "./node_modules/rest/interceptor/defaultRequest.js");
-var mime = __webpack_require__(/*! rest/interceptor/mime */ "./node_modules/rest/interceptor/mime.js");
-var uriTemplateInterceptor = __webpack_require__(/*! ./api/uriTemplateInterceptor */ "./src/main/js/api/uriTemplateInterceptor.js");
-var errorCode = __webpack_require__(/*! rest/interceptor/errorCode */ "./node_modules/rest/interceptor/errorCode.js");
-var baseRegistry = __webpack_require__(/*! rest/mime/registry */ "./node_modules/rest/mime/registry.js");
-var registry = baseRegistry.child();
-registry.register('text/uri-list', __webpack_require__(/*! ./api/uriListConverter */ "./src/main/js/api/uriListConverter.js"));
-registry.register('application/hal+json', __webpack_require__(/*! rest/mime/type/application/hal */ "./node_modules/rest/mime/type/application/hal.js"));
-module.exports = rest.wrap(mime, {
-  registry: registry
-}).wrap(uriTemplateInterceptor).wrap(errorCode).wrap(defaultRequest, {
-  headers: {
-    'Accept': 'application/hal+json'
-  }
-});
+module.exports = App;
 
 /***/ }),
 
