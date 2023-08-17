@@ -1,9 +1,15 @@
 @server = http://localhost:8091/api
 
 @instrumentos = {{server}}/instrumentos
+
+@musicos = {{server}}/musicos
 ###
 
 GET {{instrumentos}}
+
+###
+
+GET {{musicos}}
 
 ###
 
