@@ -1,15 +1,13 @@
 @server = http://localhost:8091/api
 
+@instrumentos = {{server}}/instrumentos
 ###
 
-GET {{server}}
+GET {{instrumentos}}
 
 ###
 
-GET {{server}}/employees
-
-###
-POST {{server}}/employees
+POST {{instrumentos}}
 Content-Type: application/json
 
-{"firstName": "Reynaldo", "lastName": "Garcia Tito", "description": "programador"}
+{"nombre": "Quena", "categoria": "Instrumento de viento", "descripcion": "tubo con orificios que al taparlos hacen sonr diferentes notas"}
