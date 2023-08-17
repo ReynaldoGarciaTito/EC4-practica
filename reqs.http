@@ -1,0 +1,15 @@
+@server = http://localhost:8091/api
+
+###
+
+GET {{server}}
+
+###
+
+GET {{server}}/employees
+
+###
+POST {{server}}/employees
+Content-Type: application/json
+
+{"firstName": "Reynaldo", "lastName": "Garcia Tito", "description": "programador"}
