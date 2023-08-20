@@ -7,31 +7,57 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabaseLoader implements CommandLineRunner {
 
-	private final InstrumentoRepository repositoryInstrumento;
-	private final MusicoRepository repositoryMusico;
-	private final BandaRepository repositoryBanda;
+	private final InstrumentoRepository repositoryI;
+	private final MusicoRepository repositoryM;
+	private final BandaRepository repositoryB;
+	private final IntegranteRepository repositoryN;
 
 	@Autowired
-	public DatabaseLoader(InstrumentoRepository repositoryInstrumento, MusicoRepository repositoryMusico, BandaRepository repositoryBanda) {
-		this.repositoryInstrumento = repositoryInstrumento;
-		this.repositoryMusico = repositoryMusico;
-		this.repositoryBanda = repositoryBanda;
-
+	public DatabaseLoader(
+		InstrumentoRepository repositoryI,
+		MusicoRepository repositoryM,
+		BandaRepository repositoryB,
+		IntegranteRepository repositoryN
+		) {
+		this.repositoryI = repositoryI;
+		this.repositoryM = repositoryM;
+		this.repositoryB = repositoryB;
+		this.repositoryN = repositoryN;
 	}
 
 	@Override
 	public void run(String... strings) throws Exception {
-		this.repositoryInstrumento
-				.save(new Instrumento("Guitarra", "Instrumento de cuerda", "De madera, con una caja de resonancia"));
-		this.repositoryInstrumento.save(
-				new Instrumento("Ukelele", "Instrumento de viento", "De madera, con una caja de resonancia potente"));
-		this.repositoryMusico.save(
-				new Musico("Jimi Hendrix"));
-		this.repositoryMusico.save(
-				new Musico("Eric Clapton"));
-		this.repositoryBanda.save(
-				new Banda("Aerosmith"));
-		this.repositoryBanda.save(
-				new Banda("Grupo 5"));
+
+		Instrumento iVoz = new Instrumento("Voz", "Viento", "Voz humana");
+		Instrumento iGuitarrElectrica = new Instrumento("Guitarra Eléctrica", "Eléctrica", "de madera, SIN caja de resonancia, 6 cuerdas templadas metálicas, pastillas y amplificador");
+		Instrumento iBajo = new Instrumento("Bajo", "Eléctrico", "Ritmos");
+		this.repositoryI.save(new Instrumento("Guitarra Acústica", "Cuerda", "de madera, con caja de resonancia, 6 cuerdas templadas"));
+		this.repositoryI.save(new Instrumento("Ukelele","Cuerda","de madera, con caja de resonancia pequeña, 4 cuerdas templadas"));
+		this.repositoryI.save(new Instrumento("Melódica","Viento","teclado pequeño de 2 octavas, sonorizado por soplido"));
+		this.repositoryI.save(new Instrumento("Batería", "Percusión", "Percisiones"));
+		this.repositoryI.save(iVoz);
+		this.repositoryI.save(iGuitarrElectrica);
+		this.repositoryI.save(iBajo);
+
+		Musico mFreddie = new Musico("Freddie");
+		Musico mBrian = new Musico("Brian");
+		Musico mRogerWaters = new Musico("Roger Waters");
+		this.repositoryM.save(mFreddie);
+		this.repositoryM.save(mBrian);
+		this.repositoryM.save(mRogerWaters);
+		this.repositoryM.save(new Musico("Roger Taylor"));
+
+		Banda bQueen = new Banda("Queen");
+		Banda bPinkFloyd = new Banda("Pink Floyd");
+		this.repositoryB.save(bQueen);
+		this.repositoryB.save(bPinkFloyd);
+
+		Integrante intFreddie = new Integrante(bQueen, mFreddie, iVoz);
+		this.repositoryN.save(intFreddie);
+		Integrante intBrian = new Integrante(bQueen, mBrian, iGuitarrElectrica);
+		this.repositoryN.save(intBrian);
+		Integrante intRogerWaters = new Integrante(bPinkFloyd, mRogerWaters, iBajo);
+		this.repositoryN.save(intRogerWaters);
+
 	}
 }

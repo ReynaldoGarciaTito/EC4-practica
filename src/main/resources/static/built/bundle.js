@@ -40845,6 +40845,8 @@ var PageNuevoInstrumento = __webpack_require__(/*! ./pages/nuevo-instrumento */ 
 var PageNuevaBanda = __webpack_require__(/*! ./pages/nueva-banda */ "./src/main/js/pages/nueva-banda.js");
 var PageEditarMusico = __webpack_require__(/*! ./pages/editar-musico */ "./src/main/js/pages/editar-musico.js");
 var PageEditarInstrumento = __webpack_require__(/*! ./pages/editar-instrumento */ "./src/main/js/pages/editar-instrumento.js");
+var PageVerBanda = __webpack_require__(/*! ./pages/ver-banda */ "./src/main/js/pages/ver-banda.js");
+var PageNuevoIntegrante = __webpack_require__(/*! ./pages/nuevo-integrante */ "./src/main/js/pages/nuevo-integrante.js");
 var router = createBrowserRouter([{
   path: '/',
   element: /*#__PURE__*/React.createElement(App, null)
@@ -40863,6 +40865,12 @@ var router = createBrowserRouter([{
 }, {
   path: '/nuevo-instrumento',
   element: /*#__PURE__*/React.createElement(PageNuevoInstrumento, null)
+}, {
+  path: '/ver-banda/:id',
+  element: /*#__PURE__*/React.createElement(PageVerBanda, null)
+}, {
+  path: '/ver-banda/:id/nuevo-integrante',
+  element: /*#__PURE__*/React.createElement(PageNuevoIntegrante, null)
 }]);
 ReactDOM.render( /*#__PURE__*/React.createElement(React.StrictMode, null, /*#__PURE__*/React.createElement(RouterProvider, {
   router: router
@@ -41318,8 +41326,8 @@ var Banda = /*#__PURE__*/function (_React$Component7) {
     value: function render() {
       var id = this.props.banda._links.self.href.split("/").slice(-1);
       return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.banda.nombre), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement(Link, {
-        to: "/editar-banda/".concat(id)
-      }, "Editar")));
+        to: "/ver-banda/".concat(id)
+      }, "Ver")));
     }
   }]);
   return Banda;
@@ -41480,6 +41488,128 @@ module.exports = PageNuevoInstrumento;
 
 /***/ }),
 
+/***/ "./src/main/js/pages/nuevo-integrante.js":
+/*!***********************************************!*\
+  !*** ./src/main/js/pages/nuevo-integrante.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var _require = __webpack_require__(/*! react */ "./node_modules/react/index.js"),
+  useState = _require.useState,
+  useEffect = _require.useEffect;
+var _require2 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js"),
+  Link = _require2.Link,
+  useParams = _require2.useParams;
+var client = __webpack_require__(/*! ../client */ "./src/main/js/client.js");
+var PageNuevoIntegrante = function PageNuevoIntegrante() {
+  var _useParams = useParams(),
+    id = _useParams.id;
+  var _useState = useState([]),
+    _useState2 = _slicedToArray(_useState, 2),
+    musicos = _useState2[0],
+    setMusicos = _useState2[1];
+  var _useState3 = useState([]),
+    _useState4 = _slicedToArray(_useState3, 2),
+    instrumentos = _useState4[0],
+    setInstrumentos = _useState4[1];
+  var _useState5 = useState(''),
+    _useState6 = _slicedToArray(_useState5, 2),
+    idMusico = _useState6[0],
+    setIdMusico = _useState6[1];
+  var _useState7 = useState(''),
+    _useState8 = _slicedToArray(_useState7, 2),
+    idInstrumento = _useState8[0],
+    setIdInstrumento = _useState8[1];
+  var handleSubmit = function handleSubmit(evento) {
+    evento.preventDefault();
+    client({
+      method: 'POST',
+      path: '/api/integrantes',
+      entity: {
+        banda: 'http://localhost:8091/api/bandas/' + id,
+        musico: 'http://localhost:8091/api/musicos/' + idMusico,
+        instrumento: 'http://localhost:8091/api/instrumentos/' + idInstrumento
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).done(function () {
+      window.location = '/';
+    });
+  };
+  useEffect(function () {
+    client({
+      method: 'GET',
+      path: '/api/musicos'
+    }).done(function (response) {
+      var musicos2 = [];
+      response.entity._embedded.musicos.map(function (musico) {
+        musicos2.push({
+          value: musico._links.self.href.split('/').slice(-1),
+          label: musico.nombre
+        });
+      });
+      setMusicos(musicos2);
+    });
+    client({
+      method: 'GET',
+      path: '/api/instrumentos'
+    }).done(function (response) {
+      var instrumentos2 = [];
+      response.entity._embedded.instrumentos.map(function (instrumento) {
+        instrumentos2.push({
+          value: instrumento._links.self.href.split('/').slice(-1),
+          label: instrumento.nombre
+        });
+      });
+      setInstrumentos(instrumentos2);
+    });
+  }, []);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Nuevo Integrante"), /*#__PURE__*/React.createElement("form", {
+    onSubmit: handleSubmit
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "musico"
+  }, "Musico"), /*#__PURE__*/React.createElement("select", {
+    name: "musico",
+    id: "musico",
+    onChange: function onChange(e) {
+      setIdMusico(e.target.value);
+    }
+  }, musicos.map(function (musico) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: musico.value,
+      value: musico.value
+    }, musico.label);
+  })), /*#__PURE__*/React.createElement("label", null, "Instrumento"), /*#__PURE__*/React.createElement("select", {
+    name: "instrumento",
+    id: "instrumento",
+    onChange: function onChange(e) {
+      setIdInstrumento(e.target.value);
+    }
+  }, instrumentos.map(function (instrumento) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: instrumento.value,
+      value: instrumento.value
+    }, instrumento.label);
+  })), /*#__PURE__*/React.createElement("input", {
+    type: "submit",
+    value: "Nuevo Integrante"
+  })), /*#__PURE__*/React.createElement(Link, {
+    to: "/"
+  }, "Volver"));
+};
+module.exports = PageNuevoIntegrante;
+
+/***/ }),
+
 /***/ "./src/main/js/pages/nuevo-musico.js":
 /*!*******************************************!*\
   !*** ./src/main/js/pages/nuevo-musico.js ***!
@@ -41539,6 +41669,74 @@ function PageNuevoMusico() {
   }, "Volver"));
 }
 module.exports = PageNuevoMusico;
+
+/***/ }),
+
+/***/ "./src/main/js/pages/ver-banda.js":
+/*!****************************************!*\
+  !*** ./src/main/js/pages/ver-banda.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var _require = __webpack_require__(/*! react */ "./node_modules/react/index.js"),
+  useState = _require.useState,
+  useEffect = _require.useEffect;
+var _require2 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js"),
+  useParams = _require2.useParams;
+var client = __webpack_require__(/*! ../client */ "./src/main/js/client.js");
+var _require3 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js"),
+  Link = _require3.Link;
+var VerBandaPage = function VerBandaPage() {
+  var _useParams = useParams(),
+    id = _useParams.id;
+  var _useState = useState({}),
+    _useState2 = _slicedToArray(_useState, 2),
+    banda = _useState2[0],
+    setBanda = _useState2[1];
+  var _useState3 = useState([]),
+    _useState4 = _slicedToArray(_useState3, 2),
+    integrantes = _useState4[0],
+    setIntegrantes = _useState4[1];
+  useEffect(function () {
+    var url_banda = '/api/bandas/' + id;
+    client({
+      method: 'GET',
+      path: url_banda
+    }).done(function (response) {
+      setBanda(response.entity);
+    });
+    client({
+      method: 'GET',
+      path: url_banda + '/formacion'
+    }).done(function (response) {
+      setIntegrantes(response.entity);
+    });
+  }, []);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Ver Banda"), /*#__PURE__*/React.createElement("table", {
+    border: "1"
+  }, /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Nombre"), /*#__PURE__*/React.createElement("td", null, banda.nombre)))), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", {
+    border: "1"
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
+    colSpan: "2"
+  }, "Integrantes")), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Musico"), /*#__PURE__*/React.createElement("th", null, "Instrumento"))), /*#__PURE__*/React.createElement("tbody", null, integrantes.map(function (integrante) {
+    return /*#__PURE__*/React.createElement("tr", {
+      key: integrante.ID
+    }, /*#__PURE__*/React.createElement("td", null, integrante.MUSICO), /*#__PURE__*/React.createElement("td", null, integrante.INSTRUMENTO));
+  }))), /*#__PURE__*/React.createElement(Link, {
+    to: "/ver-banda/".concat(id, "/nuevo-integrante")
+  }, "Nuevo Integrante"), " | ", /*#__PURE__*/React.createElement(Link, {
+    to: "/"
+  }, "Volver"));
+};
+module.exports = VerBandaPage;
 
 /***/ }),
 

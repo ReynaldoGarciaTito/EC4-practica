@@ -8,6 +8,8 @@ const PageNuevoInstrumento = require('./pages/nuevo-instrumento');
 const PageNuevaBanda = require('./pages/nueva-banda');
 const PageEditarMusico = require('./pages/editar-musico');
 const PageEditarInstrumento = require('./pages/editar-instrumento');
+const PageVerBanda = require('./pages/ver-banda');
+const PageNuevoIntegrante = require('./pages/nuevo-integrante');
 
 const router = createBrowserRouter([
 	{path: '/', element: <App></App>},
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
 	{path: '/editar-musico/:id', element: <PageEditarMusico></PageEditarMusico>},
 	{path: '/editar-instrumento/:id', element: <PageEditarInstrumento></PageEditarInstrumento>},
 	{path: '/nuevo-instrumento', element: <PageNuevoInstrumento></PageNuevoInstrumento>},
+	{path: '/ver-banda/:id', element: <PageVerBanda></PageVerBanda>},
+	{path: '/ver-banda/:id/nuevo-integrante', element: <PageNuevoIntegrante></PageNuevoIntegrante>},
 ]);
 
 ReactDOM.render(

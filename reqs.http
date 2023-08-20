@@ -3,6 +3,8 @@
 @instrumentos = {{server}}/instrumentos
 
 @musicos = {{server}}/musicos
+
+@integrantes = {{server}}/integrantes
 ###
 
 GET {{instrumentos}}
@@ -17,3 +19,7 @@ POST {{instrumentos}}
 Content-Type: application/json
 
 {"nombre": "Quena", "categoria": "Instrumento de viento", "descripcion": "tubo con orificios que al taparlos hacen sonr diferentes notas"}
+
+###
+
+GET {{server}}/bandas/1/formacion

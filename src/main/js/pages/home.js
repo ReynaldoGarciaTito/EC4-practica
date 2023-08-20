@@ -159,7 +159,7 @@ class Banda extends React.Component {
 			<tr>
 				<td>{this.props.banda.nombre}</td>
 				<td>
-					<Link to={`/editar-banda/${id}`}>Ver</Link>
+					<Link to={`/ver-banda/${id}`}>Ver</Link>
 				</td>
 			</tr>
 		)
