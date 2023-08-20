@@ -9,7 +9,7 @@ GET {{instrumentos}}
 
 ###
 
-GET {{musicos}}
+GET {{musicos}}/1
 
 ###
 
