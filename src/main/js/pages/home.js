@@ -6,7 +6,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { instrumentos: [], musicos: [] };
+		this.state = { instrumentos: [], musicos: [], bandas: [] };
 	}
 
 	componentDidMount() {
@@ -16,33 +16,51 @@ class App extends React.Component {
 		client({ method: 'GET', path: '/api/musicos' }).done(response => {
 			this.setState({ musicos: response.entity._embedded.musicos });
 		});
+		client({ method: 'GET', path: '/api/bandas' }).done(response => {
+			this.setState({ bandas: response.entity._embedded.bandas });
+		});
 	}
 
 	render() {
 		return (
 			<>
-				<Titulo entidad="Instrumento" />
-				<InstrumentoList instrumentos={this.state.instrumentos} />
-				<Titulo entidad="Musico" />
-				<MusicoList musicos={this.state.musicos} />
-				<br />
-				<Link to="/nuevo-musico">Nuevo Musico</Link>
+				<h1>Aplicación Demo</h1>
+
+				<div style={{ "width": "100%", "display": "flex" }}>
+
+					<div style={{ "width": "calc(100%/3)" }} >
+						<Titulo entidad="Instrumento" emoji="🎸" />
+						<InstrumentoList instrumentos={this.state.instrumentos} />
+						<br></br>
+						<Link to="/nuevo-instrumento">Nuevo Instrumento</Link>
+					</div>
+					<div style={{ "width": "calc(100%/3)" }} >
+						<Titulo entidad="Músico" emoji="🎶" />
+						<MusicoList musicos={this.state.musicos} />
+						<br />
+						<Link to="/nuevo-musico">Nuevo Músico</Link>
+					</div>
+					<div style={{ "width": "calc(100%/3)" }} >
+						<Titulo entidad="Banda" emoji="🥁" />
+						<BandaList bandas={this.state.bandas} />
+						<br />
+						<Link to="/nueva-banda">Nueva Banda</Link>
+					</div>
+				</div>
 			</>
 		)
 	}
 }
 
-class Titulo extends React.Component {
-	render() {
-		return (
-			<>
-				<hr />
-				<h2>{this.props.entidad}</h2>
-				<span>Listado de {this.props.entidad.toLowerCase()}</span>
-				<br />
-			</>
-		)
-	}
+const Titulo = (props) => {
+	return (
+		<>
+			<hr />
+			<h2>{props.emoji} . {props.entidad}</h2>
+			<span>Listado de {props.entidad.toLowerCase()}</span>
+			<hr />
+		</>
+	)
 }
 
 class InstrumentoList extends React.Component {
@@ -85,6 +103,25 @@ class MusicoList extends React.Component {
 	}
 }
 
+class BandaList extends React.Component {
+	render() {
+		const bandas = this.props.bandas.map(banda =>
+			<Banda key={banda._links.self.href} banda={banda} />
+		);
+		return (
+			<table border="1">
+				<tbody>
+					<tr>
+						<th>Nombre</th>
+						<th>Acciones</th>
+					</tr>
+					{bandas}
+				</tbody>
+			</table>
+		)
+	}
+}
+
 class Instrumento extends React.Component {
 	render() {
 		const id = this.props.instrumento._links.self.href.split("/").slice(-1);
@@ -114,5 +151,20 @@ class Musico extends React.Component {
 		)
 	}
 }
+
+class Banda extends React.Component {
+	render() {
+		const id = this.props.banda._links.self.href.split("/").slice(-1);
+		return (
+			<tr>
+				<td>{this.props.banda.nombre}</td>
+				<td>
+					<Link to={`/editar-banda/${id}`}>Ver</Link>
+				</td>
+			</tr>
+		)
+	}
+}
+
 
 module.exports = App;
